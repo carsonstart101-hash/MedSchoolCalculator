@@ -1,4 +1,3 @@
-</div>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,29 +15,49 @@
             --border-light: #edf2f7;
         }
 
-        body 
-        <div style="background: #1a2a6c; padding: 10px; text-align: center; margin-bottom: 20px;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">💰 Cost Calculator</a>
-    <a href="experiences.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">📋 Experience Log</a>
-    <a href="tracker_suite.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">🎯 Tracker Suite</a>
-        {
+        body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg);
             color: var(--primary);
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Set to 0 so the menu touches the edges */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Universal Menu Styling */
+        .universal-menu {
+            background: #1a2a6c;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .universal-menu a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05rem;
+            transition: opacity 0.2s;
+        }
+
+        .universal-menu a:hover {
+            opacity: 0.8;
         }
 
         .container {
             width: 100%;
             max-width: 850px;
+            padding: 30px 20px;
+            box-sizing: border-box;
         }
 
         header {
             text-align: center;
-            padding: 40px 0 30px;
+            margin-bottom: 30px;
         }
 
         h1 { margin: 0; font-size: 2.2rem; letter-spacing: -1px; }
@@ -187,148 +206,151 @@
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Future Dr. Maddy's Hub 🩺</h1>
-        <p class="subtitle">Search, calculate, and track your med school journey.</p>
-    </header>
-
-    <div class="admin-panel">
-        <div class="form-title">➕ Add New School to Database</div>
-        <div class="input-grid">
-            <div class="field">
-                <label>School Name</label>
-                <input type="text" id="name" placeholder="e.g. Yale Medicine">
-            </div>
-            <div class="field">
-                <label>City/State</label>
-                <input type="text" id="city" placeholder="e.g. New Haven, CT">
-            </div>
-            <div class="field">
-                <label>Tuition ($)</label>
-                <input type="number" id="tuition" placeholder="60000">
-            </div>
-            <div class="field">
-                <label>Living Cost ($)</label>
-                <input type="number" id="living" placeholder="25000">
-            </div>
-            <div class="field">
-                <label>Acceptance %</label>
-                <input type="text" id="accept" placeholder="4.2%">
-            </div>
-            <div class="field">
-                <label>Avg GPA</label>
-                <input type="text" id="gpa" placeholder="3.92">
-            </div>
-            <div class="field">
-                <label>Avg MCAT</label>
-                <input type="number" id="mcat" placeholder="518">
-            </div>
-            <button class="btn-add" onclick="saveSchool()">Save School to List</button>
-        </div>
+    <!-- Universal Navigation Menu -->
+    <div class="universal-menu">
+        <a href="index.html">💰 Cost Calculator</a>
+        <a href="experiences.html">📋 Experience Log</a>
+        <a href="tracker_suite.html">🎯 Tracker Suite</a>
     </div>
 
-    <input type="text" class="search-box" id="search" placeholder="🔍 Search through your saved schools..." onkeyup="render()">
+    <!-- Main Content Container -->
+    <div class="container">
+        <header>
+            <h1>Future Dr. Maddy's Hub 🩺</h1>
+            <p class="subtitle">Search, calculate, and track your med school journey.</p>
+        </header>
 
-    <div id="displayArea"></div>
-</div>
+        <div class="admin-panel">
+            <div class="form-title">➕ Add New School to Database</div>
+            <div class="input-grid">
+                <div class="field">
+                    <label>School Name</label>
+                    <input type="text" id="name" placeholder="e.g. Yale Medicine">
+                </div>
+                <div class="field">
+                    <label>City/State</label>
+                    <input type="text" id="city" placeholder="e.g. New Haven, CT">
+                </div>
+                <div class="field">
+                    <label>Tuition ($)</label>
+                    <input type="number" id="tuition" placeholder="60000">
+                </div>
+                <div class="field">
+                    <label>Living Cost ($)</label>
+                    <input type="number" id="living" placeholder="25000">
+                </div>
+                <div class="field">
+                    <label>Acceptance %</label>
+                    <input type="text" id="accept" placeholder="4.2%">
+                </div>
+                <div class="field">
+                    <label>Avg GPA</label>
+                    <input type="text" id="gpa" placeholder="3.92">
+                </div>
+                <div class="field">
+                    <label>Avg MCAT</label>
+                    <input type="number" id="mcat" placeholder="518">
+                </div>
+                <button class="btn-add" onclick="saveSchool()">Save School to List</button>
+            </div>
+        </div>
 
-<script>
-    // Initial data (Updated with GPA and MCAT)
-    let schools = JSON.parse(localStorage.getItem('maddy_data')) || [
-        { name: "Johns Hopkins University", city: "Baltimore, MD", tuition: 62800, living: 24000, acceptance: "6.3%", gpa: "3.94", mcat: "521" },
-        { name: "NYU Grossman", city: "New York, NY", tuition: 0, living: 35000, acceptance: "2.1%", gpa: "3.96", mcat: "522" },
-        { name: "Harvard Medical School", city: "Boston, MA", tuition: 69300, living: 31000, acceptance: "2.3%", gpa: "3.95", mcat: "520" }
-    ];
+        <input type="text" class="search-box" id="search" placeholder="🔍 Search through your saved schools..." onkeyup="render()">
 
-    function saveSchool() {
-        const name = document.getElementById('name').value;
-        const city = document.getElementById('city').value;
-        const tuition = parseInt(document.getElementById('tuition').value) || 0;
-        const living = parseInt(document.getElementById('living').value) || 0;
-        const acceptance = document.getElementById('accept').value || "N/A";
-        const gpa = document.getElementById('gpa').value || "N/A";
-        const mcat = document.getElementById('mcat').value || "N/A";
+        <div id="displayArea"></div>
+    </div>
 
-        if(!name) return alert("Please enter at least a school name.");
+    <!-- JavaScript Database Logic -->
+    <script>
+        let schools = JSON.parse(localStorage.getItem('maddy_data')) || [
+            { name: "Johns Hopkins University", city: "Baltimore, MD", tuition: 62800, living: 24000, acceptance: "6.3%", gpa: "3.94", mcat: "521" },
+            { name: "NYU Grossman", city: "New York, NY", tuition: 0, living: 35000, acceptance: "2.1%", gpa: "3.96", mcat: "522" },
+            { name: "Harvard Medical School", city: "Boston, MA", tuition: 69300, living: 31000, acceptance: "2.3%", gpa: "3.95", mcat: "520" }
+        ];
 
-        schools.push({ name, city, tuition, living, acceptance, gpa, mcat });
-        localStorage.setItem('maddy_data', JSON.stringify(schools));
-        
-        // Clear inputs
-        document.querySelectorAll('input:not(#search)').forEach(i => i.value = "");
-        render();
-    }
+        function saveSchool() {
+            const name = document.getElementById('name').value;
+            const city = document.getElementById('city').value;
+            const tuition = parseInt(document.getElementById('tuition').value) || 0;
+            const living = parseInt(document.getElementById('living').value) || 0;
+            const acceptance = document.getElementById('accept').value || "N/A";
+            const gpa = document.getElementById('gpa').value || "N/A";
+            const mcat = document.getElementById('mcat').value || "N/A";
 
-    function deleteSchool(index) {
-        if(confirm("Are you sure you want to remove this school?")) {
-            schools.splice(index, 1);
+            if(!name) return alert("Please enter at least a school name.");
+
+            schools.push({ name, city, tuition, living, acceptance, gpa, mcat });
             localStorage.setItem('maddy_data', JSON.stringify(schools));
+            
+            document.querySelectorAll('input:not(#search)').forEach(i => i.value = "");
             render();
         }
-    }
 
-    function render() {
-        const query = document.getElementById('search').value.toLowerCase();
-        const display = document.getElementById('displayArea');
-        display.innerHTML = "";
+        function deleteSchool(index) {
+            if(confirm("Are you sure you want to remove this school?")) {
+                schools.splice(index, 1);
+                localStorage.setItem('maddy_data', JSON.stringify(schools));
+                render();
+            }
+        }
 
-        const filtered = schools.filter(s => 
-            s.name.toLowerCase().includes(query) || 
-            s.city.toLowerCase().includes(query)
-        );
+        function render() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const display = document.getElementById('displayArea');
+            display.innerHTML = "";
 
-        filtered.forEach((s, index) => {
-            const total = s.tuition + s.living;
-            
-            // Handle older saved schools that might not have GPA/MCAT yet
-            const displayGpa = s.gpa || "N/A";
-            const displayMcat = s.mcat || "N/A";
+            const filtered = schools.filter(s => 
+                s.name.toLowerCase().includes(query) || 
+                s.city.toLowerCase().includes(query)
+            );
 
-            display.innerHTML += `
-                <div class="school-card">
-                    <div class="card-header">
-                        <div class="info">
-                            <h3>${s.name}</h3>
-                            <p>${s.city}</p>
+            filtered.forEach((s, index) => {
+                const total = s.tuition + s.living;
+                const displayGpa = s.gpa || "N/A";
+                const displayMcat = s.mcat || "N/A";
+
+                display.innerHTML += `
+                    <div class="school-card">
+                        <div class="card-header">
+                            <div class="info">
+                                <h3>${s.name}</h3>
+                                <p>${s.city}</p>
+                            </div>
+                            <button class="delete-btn" onclick="deleteSchool(${index})">Remove</button>
                         </div>
-                        <button class="delete-btn" onclick="deleteSchool(${index})">Remove</button>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">Tuition</span>
+                                <span class="stat-val">${s.tuition === 0 ? "Free" : "$" + s.tuition.toLocaleString()}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Living Exp.</span>
+                                <span class="stat-val">$${s.living.toLocaleString()}</span>
+                            </div>
+                            <div class="stat-item highlight-box">
+                                <span class="stat-label">Total / Year</span>
+                                <span class="stat-val">$${total.toLocaleString()}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Acceptance</span>
+                                <span class="stat-val">${s.acceptance}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Avg GPA</span>
+                                <span class="stat-val">${displayGpa}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Avg MCAT</span>
+                                <span class="stat-val">${displayMcat}</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-label">Tuition</span>
-                            <span class="stat-val">${s.tuition === 0 ? "Free" : "$" + s.tuition.toLocaleString()}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Living Exp.</span>
-                            <span class="stat-val">$${s.living.toLocaleString()}</span>
-                        </div>
-                        <div class="stat-item highlight-box">
-                            <span class="stat-label">Total / Year</span>
-                            <span class="stat-val">$${total.toLocaleString()}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Acceptance</span>
-                            <span class="stat-val">${s.acceptance}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg GPA</span>
-                            <span class="stat-val">${displayGpa}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg MCAT</span>
-                            <span class="stat-val">${displayMcat}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-    }
+                `;
+            });
+        }
 
-    // Run when the page loads
-    render();
-</script>
-
+        render();
+    </script>
 </body>
 </html>
