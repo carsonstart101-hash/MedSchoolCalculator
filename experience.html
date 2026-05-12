@@ -1,4 +1,3 @@
-</div>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,24 +18,42 @@
             --border-light: #edf2f7;
         }
 
-        body 
-        <div style="background: #1a2a6c; padding: 10px; text-align: center; margin-bottom: 20px;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">💰 Cost Calculator</a>
-    <a href="experiences.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">📋 Experience Log</a>
-    <a href="tracker_suite.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">🎯 Tracker Suite</a>{
-            
+        body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg);
             color: var(--primary);
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Set to 0 so the menu touches the edges */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
+
+        /* Universal Menu Styling */
+        .universal-menu {
+            background: #1a2a6c;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .universal-menu a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05rem;
+            transition: opacity 0.2s;
+        }
+
+        .universal-menu a:hover { opacity: 0.8; }
 
         .container {
             width: 100%;
             max-width: 900px;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         header {
@@ -207,161 +224,168 @@
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>AMCAS Experience Logger 📋</h1>
-        <p class="subtitle">Track your hours and write your reflections before application season!</p>
-    </header>
-
-    <!-- Hours Dashboard -->
-    <div class="dashboard">
-        <div class="dash-card clinical">
-            <div class="dash-label">Clinical Hours</div>
-            <div class="dash-value" id="tot-clinical">0</div>
-        </div>
-        <div class="dash-card shadowing">
-            <div class="dash-label">Shadowing</div>
-            <div class="dash-value" id="tot-shadowing">0</div>
-        </div>
-        <div class="dash-card volunteer">
-            <div class="dash-label">Volunteering</div>
-            <div class="dash-value" id="tot-volunteer">0</div>
-        </div>
-        <div class="dash-card research">
-            <div class="dash-label">Research</div>
-            <div class="dash-value" id="tot-research">0</div>
-        </div>
+    <!-- Universal Navigation Menu -->
+    <div class="universal-menu">
+        <a href="index.html">💰 Cost Calculator</a>
+        <a href="experiences.html">📋 Experience Log</a>
+        <a href="tracker_suite.html">🎯 Tracker Suite</a>
     </div>
 
-    <!-- Input Form -->
-    <div class="admin-panel">
-        <div class="form-title">➕ Log a New Experience</div>
-        <div class="input-grid">
-            <div class="field">
-                <label>Category</label>
-                <select id="category">
-                    <option value="clinical">Clinical / Paid Patient Care</option>
-                    <option value="shadowing">Physician Shadowing</option>
-                    <option value="volunteer">Community Service / Volunteering</option>
-                    <option value="research">Research / Lab</option>
-                </select>
+    <!-- Main Content Container -->
+    <div class="container">
+        <header>
+            <h1>AMCAS Experience Logger 📋</h1>
+            <p class="subtitle">Track your hours and write your reflections before application season!</p>
+        </header>
+
+        <!-- Hours Dashboard -->
+        <div class="dashboard">
+            <div class="dash-card clinical">
+                <div class="dash-label">Clinical Hours</div>
+                <div class="dash-value" id="tot-clinical">0</div>
             </div>
-            <div class="field">
-                <label>Role / Title</label>
-                <input type="text" id="role" placeholder="e.g. Medical Scribe">
+            <div class="dash-card shadowing">
+                <div class="dash-label">Shadowing</div>
+                <div class="dash-value" id="tot-shadowing">0</div>
             </div>
-            <div class="field">
-                <label>Organization / Doctor</label>
-                <input type="text" id="org" placeholder="e.g. Mercy Hospital">
+            <div class="dash-card volunteer">
+                <div class="dash-label">Volunteering</div>
+                <div class="dash-value" id="tot-volunteer">0</div>
             </div>
-            <div class="field">
-                <label>Date Range</label>
-                <input type="text" id="dates" placeholder="e.g. May 2024 - Present">
+            <div class="dash-card research">
+                <div class="dash-label">Research</div>
+                <div class="dash-value" id="tot-research">0</div>
             </div>
-            <div class="field">
-                <label>Total Hours Completed</label>
-                <input type="number" id="hours" placeholder="0">
-            </div>
-            <div class="field full-width">
-                <label>Reflection (Most Meaningful Interaction)</label>
-                <textarea id="reflection" placeholder="Describe what you learned or a patient interaction that stood out to you. This will save you when writing your personal statement!"></textarea>
-            </div>
-            <button class="btn-add" onclick="saveExperience()">Save to Log</button>
         </div>
+
+        <!-- Input Form -->
+        <div class="admin-panel">
+            <div class="form-title">➕ Log a New Experience</div>
+            <div class="input-grid">
+                <div class="field">
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="clinical">Clinical / Paid Patient Care</option>
+                        <option value="shadowing">Physician Shadowing</option>
+                        <option value="volunteer">Community Service / Volunteering</option>
+                        <option value="research">Research / Lab</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Role / Title</label>
+                    <input type="text" id="role" placeholder="e.g. Medical Scribe">
+                </div>
+                <div class="field">
+                    <label>Organization / Doctor</label>
+                    <input type="text" id="org" placeholder="e.g. Mercy Hospital">
+                </div>
+                <div class="field">
+                    <label>Date Range</label>
+                    <input type="text" id="dates" placeholder="e.g. May 2024 - Present">
+                </div>
+                <div class="field">
+                    <label>Total Hours Completed</label>
+                    <input type="number" id="hours" placeholder="0">
+                </div>
+                <div class="field full-width">
+                    <label>Reflection (Most Meaningful Interaction)</label>
+                    <textarea id="reflection" placeholder="Describe what you learned or a patient interaction that stood out to you. This will save you when writing your personal statement!"></textarea>
+                </div>
+                <button class="btn-add" onclick="saveExperience()">Save to Log</button>
+            </div>
+        </div>
+
+        <!-- Feed of Logged Experiences -->
+        <div id="logArea" class="log-list"></div>
     </div>
 
-    <!-- Feed of Logged Experiences -->
-    <div id="logArea" class="log-list"></div>
-</div>
+    <!-- JavaScript Database Logic -->
+    <script>
+        let experiences = JSON.parse(localStorage.getItem('maddy_experiences')) || [];
 
-<script>
-    // Load from Maddy's browser storage specifically for experiences
-    let experiences = JSON.parse(localStorage.getItem('maddy_experiences')) || [];
+        function saveExperience() {
+            const category = document.getElementById('category').value;
+            const role = document.getElementById('role').value;
+            const org = document.getElementById('org').value;
+            const dates = document.getElementById('dates').value;
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const reflection = document.getElementById('reflection').value;
 
-    function saveExperience() {
-        const category = document.getElementById('category').value;
-        const role = document.getElementById('role').value;
-        const org = document.getElementById('org').value;
-        const dates = document.getElementById('dates').value;
-        const hours = parseInt(document.getElementById('hours').value) || 0;
-        const reflection = document.getElementById('reflection').value;
+            if(!role || !org) return alert("Please enter your Role and the Organization!");
 
-        if(!role || !org) return alert("Please enter your Role and the Organization!");
-
-        experiences.push({ category, role, org, dates, hours, reflection });
-        localStorage.setItem('maddy_experiences', JSON.stringify(experiences));
-        
-        // Clear form
-        document.getElementById('role').value = "";
-        document.getElementById('org').value = "";
-        document.getElementById('dates').value = "";
-        document.getElementById('hours').value = "";
-        document.getElementById('reflection').value = "";
-
-        render();
-    }
-
-    function deleteExp(index) {
-        if(confirm("Delete this experience?")) {
-            experiences.splice(index, 1);
+            experiences.push({ category, role, org, dates, hours, reflection });
             localStorage.setItem('maddy_experiences', JSON.stringify(experiences));
+            
+            // Clear form
+            document.getElementById('role').value = "";
+            document.getElementById('org').value = "";
+            document.getElementById('dates').value = "";
+            document.getElementById('hours').value = "";
+            document.getElementById('reflection').value = "";
+
             render();
         }
-    }
 
-    function render() {
-        const display = document.getElementById('logArea');
-        display.innerHTML = "";
-
-        // Reset counters
-        let totals = { clinical: 0, shadowing: 0, volunteer: 0, research: 0 };
-
-        // Reverse the array so the newest entries show up at the top
-        [...experiences].reverse().forEach((exp, revIndex) => {
-            const originalIndex = experiences.length - 1 - revIndex;
-            
-            // Add to totals
-            if(totals[exp.category] !== undefined) {
-                totals[exp.category] += exp.hours;
+        function deleteExp(index) {
+            if(confirm("Delete this experience?")) {
+                experiences.splice(index, 1);
+                localStorage.setItem('maddy_experiences', JSON.stringify(experiences));
+                render();
             }
+        }
 
-            // Capitalize category for tag
-            const catName = exp.category === 'volunteer' ? 'Volunteering' : exp.category;
+        function render() {
+            const display = document.getElementById('logArea');
+            display.innerHTML = "";
 
-            display.innerHTML += `
-                <div class="log-card">
-                    <button class="delete-btn" onclick="deleteExp(${originalIndex})">Delete</button>
-                    <div class="log-header">
-                        <div>
-                            <h3 class="log-title">${exp.role}</h3>
-                            <p class="log-org">${exp.org}</p>
+            // Reset counters
+            let totals = { clinical: 0, shadowing: 0, volunteer: 0, research: 0 };
+
+            // Reverse the array so the newest entries show up at the top
+            [...experiences].reverse().forEach((exp, revIndex) => {
+                const originalIndex = experiences.length - 1 - revIndex;
+                
+                // Add to totals
+                if(totals[exp.category] !== undefined) {
+                    totals[exp.category] += exp.hours;
+                }
+
+                // Capitalize category for tag
+                const catName = exp.category === 'volunteer' ? 'Volunteering' : exp.category;
+
+                display.innerHTML += `
+                    <div class="log-card">
+                        <button class="delete-btn" onclick="deleteExp(${originalIndex})">Delete</button>
+                        <div class="log-header">
+                            <div>
+                                <h3 class="log-title">${exp.role}</h3>
+                                <p class="log-org">${exp.org}</p>
+                            </div>
+                            <span class="tag ${exp.category}">${catName}</span>
                         </div>
-                        <span class="tag ${exp.category}">${catName}</span>
-                    </div>
-                    <div class="log-stats">
-                        <div class="stat"><span>Dates:</span> ${exp.dates || "N/A"}</div>
-                        <div class="stat"><span>Hours:</span> ${exp.hours}</div>
-                    </div>
-                    ${exp.reflection ? `
-                        <div class="reflection-box">
-                            <strong>Reflection:</strong><br>
-                            ${exp.reflection}
+                        <div class="log-stats">
+                            <div class="stat"><span>Dates:</span> ${exp.dates || "N/A"}</div>
+                            <div class="stat"><span>Hours:</span> ${exp.hours}</div>
                         </div>
-                    ` : ''}
-                </div>
-            `;
-        });
+                        ${exp.reflection ? `
+                            <div class="reflection-box">
+                                <strong>Reflection:</strong><br>
+                                ${exp.reflection}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
 
-        // Update the dashboard numbers
-        document.getElementById('tot-clinical').innerText = totals.clinical;
-        document.getElementById('tot-shadowing').innerText = totals.shadowing;
-        document.getElementById('tot-volunteer').innerText = totals.volunteer;
-        document.getElementById('tot-research').innerText = totals.research;
-    }
+            // Update the dashboard numbers
+            document.getElementById('tot-clinical').innerText = totals.clinical;
+            document.getElementById('tot-shadowing').innerText = totals.shadowing;
+            document.getElementById('tot-volunteer').innerText = totals.volunteer;
+            document.getElementById('tot-research').innerText = totals.research;
+        }
 
-    // Run on load
-    render();
-</script>
-
+        // Run on load
+        render();
+    </script>
 </body>
 </html>
