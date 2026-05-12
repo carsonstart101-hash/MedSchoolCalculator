@@ -3,217 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maddy's Permanent Med School Tracker</title>
+    <title>Maddy's Med School Database</title>
     <style>
         :root {
-            --primary: #1a2a6c;
-            --accent: #70a1ff;
-            --danger: #ff4757;
-            --success: #2ed573;
-            --bg: #f1f2f6;
+            --primary: #2d3436;
+            --accent: #6c5ce7;
+            --secondary: #00cec9;
+            --bg: #f9f9fb;
+            --card-bg: #ffffff;
+            --text-muted: #636e72;
+            --border-light: #edf2f7;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg);
+            color: var(--primary);
             margin: 0;
             padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
         }
 
-        .container { width: 100%; max-width: 800px; }
+        .container {
+            width: 100%;
+            max-width: 850px;
+        }
 
-        header { text-align: center; margin-bottom: 30px; color: var(--primary); }
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+        }
 
-        /* Input Form Styling */
-        .card {
-            background: white;
+        h1 { margin: 0; font-size: 2.2rem; letter-spacing: -1px; }
+        .subtitle { color: var(--text-muted); margin-top: 10px; }
+
+        /* Form Styling */
+        .admin-panel {
+            background: var(--card-bg);
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
         }
 
-        .form-grid {
+        .form-title {
+            margin-top: 0;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
         }
 
-        .form-group { display: flex; flex-direction: column; }
-
-        label { font-size: 11px; font-weight: bold; margin-bottom: 5px; color: #57606f; text-transform: uppercase; }
-
+        .field { display: flex; flex-direction: column; }
+        label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+        
         input {
             padding: 12px;
-            border: 1px solid #dfe4ea;
-            border-radius: 8px;
-            font-size: 14px;
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
             outline: none;
+            transition: border-color 0.2s;
         }
 
         input:focus { border-color: var(--accent); }
 
-        .btn-save {
+        .btn-add {
             grid-column: 1 / -1;
-            background: var(--primary);
+            background: var(--accent);
             color: white;
-            padding: 14px;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 10px;
             font-weight: bold;
+            cursor: pointer;
             margin-top: 10px;
-            transition: 0.3s;
+            font-size: 1rem;
+            transition: opacity 0.2s;
         }
 
-        .btn-save:hover { background: #001a4d; }
+        .btn-add:hover { opacity: 0.9; }
 
-        /* School List Styling */
-        .school-item {
+        /* Search bar */
+        .search-box {
+            width: 100%;
+            padding: 18px 25px;
+            border-radius: 15px;
+            border: none;
             background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+        }
+
+        /* Results Cards */
+        .school-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+            border: 1px solid var(--border-light);
+        }
+
+        .school-card:hover { transform: translateY(-3px); border-color: #dcdde1; }
+
+        .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-left: 5px solid var(--accent);
-            animation: fadeIn 0.4s ease;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
         }
 
-        .school-info h3 { margin: 0; color: var(--primary); font-size: 1.2rem; }
-        .school-info p { margin: 4px 0 0; color: #747d8c; font-size: 0.9rem; }
+        .info h3 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+        .info p { margin: 5px 0 0; color: var(--text-muted); font-size: 0.95rem; }
 
-        .stats-row { display: flex; gap: 20px; align-items: center; }
-
-        .stat-group { text-align: center; }
-        .stat-label { font-size: 10px; color: #a4b0be; text-transform: uppercase; }
-        .stat-val { font-weight: bold; color: #2f3542; }
-
-        .total-box { color: var(--success); font-size: 1.1rem; }
-
-        .btn-delete {
-            background: none;
-            border: 1px solid #ffcccb;
-            color: var(--danger);
-            padding: 6px 10px;
-            border-radius: 6px;
+        .delete-btn {
+            background: #fff0f0;
+            color: #ff7675;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
-            margin-left: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
         }
 
-        .btn-delete:hover { background: var(--danger); color: white; }
+        .delete-btn:hover { background: #ff7675; color: white; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 15px;
         }
+
+        .stat-item {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label { 
+            display: block; 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            color: var(--text-muted); 
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .stat-val { 
+            display: block; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            color: var(--primary);
+        }
+
+        .highlight-box {
+            background: #f0efff;
+            border: 1px solid #dcd8ff;
+        }
+
+        .highlight-box .stat-val { color: var(--accent); }
+
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Future Dr. Maddy's Database 🧬</h1>
-        <p>Data is automatically saved to your browser.</p>
+        <h1>Future Dr. Maddy's Hub 🩺</h1>
+        <p class="subtitle">Search, calculate, and track your med school journey.</p>
     </header>
 
-    <!-- Add School Form -->
-    <div class="card">
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Medical School</label>
-                <input type="text" id="name" placeholder="e.g. Stanford Medicine">
+    <div class="admin-panel">
+        <div class="form-title">➕ Add New School to Database</div>
+        <div class="input-grid">
+            <div class="field">
+                <label>School Name</label>
+                <input type="text" id="name" placeholder="e.g. Yale Medicine">
             </div>
-            <div class="form-group">
-                <label>City & State</label>
-                <input type="text" id="city" placeholder="e.g. Stanford, CA">
+            <div class="field">
+                <label>City/State</label>
+                <input type="text" id="city" placeholder="e.g. New Haven, CT">
             </div>
-            <div class="form-group">
+            <div class="field">
                 <label>Tuition ($)</label>
-                <input type="number" id="tuition" placeholder="0">
+                <input type="number" id="tuition" placeholder="60000">
             </div>
-            <div class="form-group">
+            <div class="field">
                 <label>Living Cost ($)</label>
-                <input type="number" id="living" placeholder="0">
+                <input type="number" id="living" placeholder="25000">
             </div>
-            <div class="form-group">
+            <div class="field">
                 <label>Acceptance %</label>
-                <input type="text" id="accept" placeholder="2.5%">
+                <input type="text" id="accept" placeholder="4.2%">
             </div>
-            <button class="btn-save" onclick="addAndSave()">Add School to Database</button>
+            <div class="field">
+                <label>Avg GPA</label>
+                <input type="text" id="gpa" placeholder="3.92">
+            </div>
+            <div class="field">
+                <label>Avg MCAT</label>
+                <input type="number" id="mcat" placeholder="518">
+            </div>
+            <button class="btn-add" onclick="saveSchool()">Save School to List</button>
         </div>
     </div>
 
-    <!-- The List -->
-    <div id="schoolContainer"></div>
+    <input type="text" class="search-box" id="search" placeholder="🔍 Search through your saved schools..." onkeyup="render()">
+
+    <div id="displayArea"></div>
 </div>
 
 <script>
-    // 1. Load data from LocalStorage immediately when the page opens
-    let mySchools = JSON.parse(localStorage.getItem('maddyMedSchools')) || [
-        { name: "NYU Grossman", city: "New York, NY", tuition: 0, living: 35000, acceptance: "2.1%" }
+    // Initial data (Updated with GPA and MCAT)
+    let schools = JSON.parse(localStorage.getItem('maddy_data')) || [
+        { name: "Johns Hopkins University", city: "Baltimore, MD", tuition: 62800, living: 24000, acceptance: "6.3%", gpa: "3.94", mcat: "521" },
+        { name: "NYU Grossman", city: "New York, NY", tuition: 0, living: 35000, acceptance: "2.1%", gpa: "3.96", mcat: "522" },
+        { name: "Harvard Medical School", city: "Boston, MA", tuition: 69300, living: 31000, acceptance: "2.3%", gpa: "3.95", mcat: "520" }
     ];
 
-    function addAndSave() {
+    function saveSchool() {
         const name = document.getElementById('name').value;
         const city = document.getElementById('city').value;
         const tuition = parseInt(document.getElementById('tuition').value) || 0;
         const living = parseInt(document.getElementById('living').value) || 0;
         const acceptance = document.getElementById('accept').value || "N/A";
+        const gpa = document.getElementById('gpa').value || "N/A";
+        const mcat = document.getElementById('mcat').value || "N/A";
 
-        if (!name) return alert("Please enter a school name!");
+        if(!name) return alert("Please enter at least a school name.");
 
-        // Add to our array
-        mySchools.push({ name, city, tuition, living, acceptance });
-
-        // 2. SAVE to LocalStorage (Turn the array into a string)
-        localStorage.setItem('maddyMedSchools', JSON.stringify(mySchools));
-
-        // Clear form and refresh list
-        document.querySelectorAll('input').forEach(i => i.value = "");
+        schools.push({ name, city, tuition, living, acceptance, gpa, mcat });
+        localStorage.setItem('maddy_data', JSON.stringify(schools));
+        
+        // Clear inputs
+        document.querySelectorAll('input:not(#search)').forEach(i => i.value = "");
         render();
     }
 
     function deleteSchool(index) {
-        mySchools.splice(index, 1);
-        localStorage.setItem('maddyMedSchools', JSON.stringify(mySchools));
-        render();
+        if(confirm("Are you sure you want to remove this school?")) {
+            schools.splice(index, 1);
+            localStorage.setItem('maddy_data', JSON.stringify(schools));
+            render();
+        }
     }
 
     function render() {
-        const container = document.getElementById('schoolContainer');
-        container.innerHTML = "";
+        const query = document.getElementById('search').value.toLowerCase();
+        const display = document.getElementById('displayArea');
+        display.innerHTML = "";
 
-        mySchools.forEach((s, index) => {
+        const filtered = schools.filter(s => 
+            s.name.toLowerCase().includes(query) || 
+            s.city.toLowerCase().includes(query)
+        );
+
+        filtered.forEach((s, index) => {
             const total = s.tuition + s.living;
-            container.innerHTML += `
-                <div class="school-item">
-                    <div class="school-info">
-                        <h3>${s.name}</h3>
-                        <p>${s.city}</p>
+            
+            // Handle older saved schools that might not have GPA/MCAT yet
+            const displayGpa = s.gpa || "N/A";
+            const displayMcat = s.mcat || "N/A";
+
+            display.innerHTML += `
+                <div class="school-card">
+                    <div class="card-header">
+                        <div class="info">
+                            <h3>${s.name}</h3>
+                            <p>${s.city}</p>
+                        </div>
+                        <button class="delete-btn" onclick="deleteSchool(${index})">Remove</button>
                     </div>
-                    <div class="stats-row">
-                        <div class="stat-group">
-                            <div class="stat-label">Acceptance</div>
-                            <div class="stat-val">${s.acceptance}</div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Tuition</span>
+                            <span class="stat-val">${s.tuition === 0 ? "Free" : "$" + s.tuition.toLocaleString()}</span>
                         </div>
-                        <div class="stat-group">
-                            <div class="stat-label">Total / Yr</div>
-                            <div class="stat-val total-box">$${total.toLocaleString()}</div>
+                        <div class="stat-item">
+                            <span class="stat-label">Living Exp.</span>
+                            <span class="stat-val">$${s.living.toLocaleString()}</span>
                         </div>
-                        <button class="btn-delete" onclick="deleteSchool(${index})">Delete</button>
+                        <div class="stat-item highlight-box">
+                            <span class="stat-label">Total / Year</span>
+                            <span class="stat-val">$${total.toLocaleString()}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Acceptance</span>
+                            <span class="stat-val">${s.acceptance}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg GPA</span>
+                            <span class="stat-val">${displayGpa}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg MCAT</span>
+                            <span class="stat-val">${displayMcat}</span>
+                        </div>
                     </div>
                 </div>
             `;
         });
     }
 
-    // Initial load
+    // Run when the page loads
     render();
 </script>
 
