@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maddy's Pre-Med Suite</title>
+    <style>
+        :root {
+            --primary: #2d3436;
+            --accent: #6c5ce7;
+            --bg: #f9f9fb;
+            --card-bg: #ffffff;
+            --text-muted: #636e72;
+            --border-light: #edf2f7;
+            
+            /* Status Colors */
+            --planning: #fdcb6e;
+            --drafting: #0984e3;
+            --submitted: #00cec9;
+            --interview: #e84393;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Navigation Menu */
+        .top-nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid transparent;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover { background: var(--bg); }
+        .nav-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Tab Content Control */
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        h2 { margin-top: 0; font-size: 1.8rem; border-bottom: 2px solid var(--border-light); padding-bottom: 10px; }
+
+        /* Shared Form Styles */
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        input, select {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus { border-color: var(--accent); }
+
+        button.add-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button.add-btn:hover { opacity: 0.9; }
+
+        /* Prerequisite Grid */
+        .prereq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .subject-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .subject-card h3 { margin: 0 0 15px 0; color: var(--accent); }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+            cursor: pointer;
+        }
+
+        .checkbox-row input {
+            flex: none; width: 18px; height: 18px; margin-right: 10px; cursor: pointer;
+        }
+
+        /* Lists (MCAT & Apps) */
+        .data-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .data-info h3 { margin: 0; font-size: 1.2rem; }
+        .data-info p { margin: 5px 0 0; color: var(--text-muted); font-size: 0.9rem; }
+
+        .data-score {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-align: right;
+        }
+
+        select.status-dropdown {
+            padding: 8px;
+            font-weight: bold;
+            border-radius: 20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background: transparent; color: #ff7675; border: none; font-size: 1.2rem; cursor: pointer; margin-left: 15px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tab Navigation -->
+    <nav class="top-nav">
+        <button class="nav-btn active" onclick="switchTab('prereqs', this)">📚 Prerequisite Checklist</button>
+        <button class="nav-btn" onclick="switchTab('mcat', this)">🧠 MCAT Tracker</button>
+        <button class="nav-btn" onclick="switchTab('apps', this)">📝 Application Manager</button>
+    </nav>
+
+    <div class="container">
+        
+        <!-- ==============================
+             TAB 1: PREREQUISITES
+        =============================== -->
+        <div id="prereqs" class="tab-content active">
+            <h2>Medical School Prerequisites</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Check off classes as you complete them. Your progress is saved automatically!</p>
+            
+            <div class="prereq-grid">
+                <div class="subject-card">
+                    <h3>Chemistry</h3>
+                    <label class="checkbox-row"><input type="checkbox" id="c-chem1" onchange="savePrereqs()"> General Chem I + Lab</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-chem2" onchange="savePrereqs()"> General Chem II + Lab</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-orgo1" onchange="savePrereqs()"> Organic Chem I + Lab</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-orgo2" onchange="savePrereqs()"> Organic Chem II + Lab</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-bioch" onchange="savePrereqs()"> Biochemistry</label>
+                </div>
+                <div class="subject-card">
+                    <h3>Biology & Physics</h3>
+                    <label class="checkbox-row"><input type="checkbox" id="c-bio1" onchange="savePrereqs()"> Biology I + Lab</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-bio2" onchange="savePrereqs()"> Biology II + Lab</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-phys1" onchange="savePrereqs()"> Physics I + Lab</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-phys2" onchange="savePrereqs()"> Physics II + Lab</label>
+                </div>
+                <div class="subject-card">
+                    <h3>Math & Humanities</h3>
+                    <label class="checkbox-row"><input type="checkbox" id="c-calc" onchange="savePrereqs()"> Calculus</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-stat" onchange="savePrereqs()"> Statistics</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-eng1" onchange="savePrereqs()"> English / Writing I</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-eng2" onchange="savePrereqs()"> English / Writing II</label>
+                    <label class="checkbox-row"><input type="checkbox" id="c-psych" onchange="savePrereqs()"> Psychology / Sociology</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==============================
+             TAB 2: MCAT COMMAND CENTER
+        =============================== -->
+        <div id="mcat" class="tab-content">
+            <h2>MCAT Practice Log</h2>
+            <div class="input-row">
+                <input type="text" id="mcat-name" placeholder="Exam (e.g. AAMC FL 1)">
+                <input type="date" id="mcat-date">
+                <input type="number" id="mcat-score" placeholder="Total Score (e.g. 515)">
+                <button class="add-btn" onclick="addMcat()">Log Score</button>
+            </div>
+            <div id="mcat-list"></div>
+        </div>
+
+        <!-- ==============================
+             TAB 3: APPLICATION MANAGER
+        =============================== -->
+        <div id="apps" class="tab-content">
+            <h2>Application Kanban Board</h2>
+            <div class="input-row">
+                <input type="text" id="app-school" placeholder="Medical School Name">
+                <select id="app-status-input">
+                    <option value="planning">Planning to Apply</option>
+                    <option value="drafting">Drafting Secondaries</option>
+                    <option value="submitted">Submitted Application</option>
+                    <option value="interview">Interview Invite!</option>
+                </select>
+                <button class="add-btn" onclick="addApp()">Add School</button>
+            </div>
+            <div id="app-list"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB SWITCHING LOGIC ---
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // --- PREREQUISITE LOGIC ---
+        function savePrereqs() {
+            const checkboxes = document.querySelectorAll('.checkbox-row input[type="checkbox"]');
+            const state = Array.from(checkboxes).map(cb => ({ id: cb.id, checked: cb.checked }));
+            localStorage.setItem('maddy_prereqs', JSON.stringify(state));
+        }
+
+        function loadPrereqs() {
+            const state = JSON.parse(localStorage.getItem('maddy_prereqs')) || [];
+            state.forEach(item => {
+                const cb = document.getElementById(item.id);
+                if(cb) cb.checked = item.checked;
+            });
+        }
+        loadPrereqs(); // Run on load
+
+        // --- MCAT LOGIC ---
+        let mcatData = JSON.parse(localStorage.getItem('maddy_mcat')) || [];
+
+        function addMcat() {
+            const name = document.getElementById('mcat-name').value;
+            const date = document.getElementById('mcat-date').value;
+            const score = document.getElementById('mcat-score').value;
+
+            if(!name || !score) return alert("Please enter the exam name and your score!");
+
+            mcatData.push({ name, date, score });
+            localStorage.setItem('maddy_mcat', JSON.stringify(mcatData));
+            
+            document.getElementById('mcat-name').value = '';
+            document.getElementById('mcat-score').value = '';
+            renderMcat();
+        }
+
+        function deleteMcat(index) {
+            mcatData.splice(index, 1);
+            localStorage.setItem('maddy_mcat', JSON.stringify(mcatData));
+            renderMcat();
+        }
+
+        function renderMcat() {
+            const list = document.getElementById('mcat-list');
+            list.innerHTML = "";
+            [...mcatData].reverse().forEach((test, i) => {
+                const originalIndex = mcatData.length - 1 - i;
+                list.innerHTML += `
+                    <div class="data-card">
+                        <div class="data-info">
+                            <h3>${test.name}</h3>
+                            <p>Taken: ${test.date || 'No date set'}</p>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div class="data-score">${test.score}</div>
+                            <button class="delete-btn" onclick="deleteMcat(${originalIndex})">×</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        renderMcat();
+
+        // --- APPLICATION LOGIC ---
+        let appData = JSON.parse(localStorage.getItem('maddy_apps')) || [];
+
+        const statusColors = {
+            'planning': 'var(--planning)',
+            'drafting': 'var(--drafting)',
+            'submitted': 'var(--submitted)',
+            'interview': 'var(--interview)'
+        };
+
+        function addApp() {
+            const school = document.getElementById('app-school').value;
+            const status = document.getElementById('app-status-input').value;
+
+            if(!school) return alert("Please enter a school name!");
+
+            appData.push({ school, status });
+            localStorage.setItem('maddy_apps', JSON.stringify(appData));
+            
+            document.getElementById('app-school').value = '';
+            renderApps();
+        }
+
+        function updateAppStatus(index, newStatus) {
+            appData[index].status = newStatus;
+            localStorage.setItem('maddy_apps', JSON.stringify(appData));
+            renderApps();
+        }
+
+        function deleteApp(index) {
+            appData.splice(index, 1);
+            localStorage.setItem('maddy_apps', JSON.stringify(appData));
+            renderApps();
+        }
+
+        function renderApps() {
+            const list = document.getElementById('app-list');
+            list.innerHTML = "";
+            appData.forEach((app, index) => {
+                const bgColor = statusColors[app.status];
+                list.innerHTML += `
+                    <div class="data-card">
+                        <div class="data-info">
+                            <h3>${app.school}</h3>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <select class="status-dropdown" style="background-color: ${bgColor};" onchange="updateAppStatus(${index}, this.value)">
+                                <option value="planning" ${app.status === 'planning' ? 'selected' : ''}>Planning</option>
+                                <option value="drafting" ${app.status === 'drafting' ? 'selected' : ''}>Drafting</option>
+                                <option value="submitted" ${app.status === 'submitted' ? 'selected' : ''}>Submitted</option>
+                                <option value="interview" ${app.status === 'interview' ? 'selected' : ''}>Interview!</option>
+                            </select>
+                            <button class="delete-btn" onclick="deleteApp(${index})">×</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        renderApps();
+    </script>
+</body>
+</html>
